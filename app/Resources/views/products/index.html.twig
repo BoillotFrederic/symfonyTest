@@ -5,5 +5,11 @@ Mes produits
 {% endblock %}
 
 {% block body %}
-{{id}}
+
+<ul>
+{% for product in products %}
+<li>ID : {{product['id']}} = {{product['reference']}}</li>
+{% endfor %}
+</ul>
+
 {% endblock %}

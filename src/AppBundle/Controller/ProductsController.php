@@ -19,10 +19,25 @@ class ProductsController extends Controller {
 
 
   /**
-   * @Route("/products/")
+   * @Route(
+   * "/products.{_format}",
+   * defaults={"_format": "html"},
+   * requirements={"_format": "html|json"}
+   * )
    * @Method("GET")
    */
-  public function indexAction() {
+  public function indexAction(Request $request) {
+    switch ($request->getRequestFormat()) {
+      case 'json':
+        return $this->json(self::PRODUCTS_TEST);
+      break;
+
+      case 'html':
+        return $this->render('products/index.html.twig', [
+          'products' => self::PRODUCTS_TEST
+        ]);
+      break;
+    }
     return $this->json(self::PRODUCTS_TEST);
   }
   /**
