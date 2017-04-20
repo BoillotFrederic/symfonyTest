@@ -13,7 +13,9 @@ class TestController extends Controller{
   * @Route("test", name="test")
   */
   public function indexAction(Request $request){
-    return new Response('Coucou');
+    return $this->render('test/test.html.twig', [
+      'userName' => 'Frédéric'
+    ]);
   }
 
 }
