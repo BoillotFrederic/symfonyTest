@@ -1,15 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-Mes produits
+  Mes produits
 {% endblock %}
 
 {% block body %}
-
-<ul>
-{% for product in products %}
-<li>ID : {{product['id']}} = {{product['reference']}}</li>
-{% endfor %}
-</ul>
-
+  <ul>
+  {% for product in products %}
+  <li>ID : {{product['id']}} = {{product['reference']}}</li>
+  {% endfor %}
+  </ul>
 {% endblock %}

@@ -29,25 +29,34 @@ class ProductsController extends Controller {
   public function indexAction(Request $request) {
     switch ($request->getRequestFormat()) {
       case 'json':
-        return $this->json(self::PRODUCTS_TEST);
-      break;
+      return $this->json(self::PRODUCTS_TEST);
 
       case 'html':
-        return $this->render('products/index.html.twig', [
-          'products' => self::PRODUCTS_TEST
-        ]);
-      break;
+      return $this->render('products/index.html.twig', [
+        'products' => self::PRODUCTS_TEST
+      ]);
     }
-    return $this->json(self::PRODUCTS_TEST);
   }
   /**
-   * @Route("/products/{id}")
+  *@Route(
+  * "/products/{id}.{_format}",
+  * defaults={"_format": "html"},
+  * requirements={"_format": "html|json"}
+  * )
    * @Method("GET")
    */
-  public function showAction($id) {
+  public function showAction(Request $request, $id) {
     foreach (self::PRODUCTS_TEST as $value){
       if($id == $value['id'])
-      return new Response("Afficher le produit numéro ". $value['reference']);
+      switch ($request->getRequestFormat()) {
+        case 'json':
+        return $this->json($value);
+
+        case 'html':
+        return $this->render('products/show.html.twig', [
+          'product' => $value
+        ]);
+      }
     }
 
     return new Response('Aucun résultat trouvé');
