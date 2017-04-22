@@ -17,70 +17,127 @@ class ProductsController extends Controller {
       ['id' => 4, 'reference' => 'AFR-4']
   ];
 
+  // Format
+  private function format(Request $request, $content, $view, $params){
+    switch ($request->getRequestFormat()) {
+      case 'json':
+      return $this->json($content);
+
+      case 'html':
+      return $this->render('products/'.$view.'.html.twig', [
+        $params => $content
+      ]);
+    }
+  }
+
 
   /**
    * @Route(
    * "/products.{_format}",
    * defaults={"_format": "html"},
-   * requirements={"_format": "html|json"}
+   * requirements={"_format": "html|json"},
    * )
    * @Method("GET")
    */
   public function indexAction(Request $request) {
-    switch ($request->getRequestFormat()) {
-      case 'json':
-      return $this->json(self::PRODUCTS_TEST);
-
-      case 'html':
-      return $this->render('products/index.html.twig', [
-        'products' => self::PRODUCTS_TEST
-      ]);
-    }
+    return $this->format($request, self::PRODUCTS_TEST, 'index', 'products');
   }
+
   /**
   *@Route(
   * "/products/{id}.{_format}",
   * defaults={"_format": "html"},
-  * requirements={"_format": "html|json"}
+  * requirements={"_format": "html|json", "id": "\d+"}
   * )
-   * @Method("GET")
-   */
+  * @Method("GET")
+  */
   public function showAction(Request $request, $id) {
-    foreach (self::PRODUCTS_TEST as $value){
-      if($id == $value['id'])
-      switch ($request->getRequestFormat()) {
-        case 'json':
-        return $this->json($value);
+    // Product
+    foreach (self::PRODUCTS_TEST as $value)
+    if($id == $value['id'])
+    return $this->format($request, $value, 'show', 'product');
 
-        case 'html':
-        return $this->render('products/show.html.twig', [
-          'product' => $value
-        ]);
+    // Error
+    return $this->format($request, 'Aucun résultat trouvé !', 'error', 'error');
+  }
+
+  /**
+   * @Route(
+   * "/products/edit/{id}.{_format}",
+   * defaults={"_format": "html", "id": "1"},
+   * requirements={"_format": "html|json", "id": "\d+"}
+   *)
+   * @Method({"GET", "PUT", "PATCH"})
+   */
+  public function editAction(Request $request, $id) {
+    // Edit product
+    if($request->getMethod() == 'GET')
+      foreach (self::PRODUCTS_TEST as $value){
+        if($id == $value['id'])
+        return $this->format($request, $value, 'edit', 'product');
       }
+    // Edit complete
+    else{
+      $this->get('session')->getFlashBag()->add('notice', array(
+        'title' => 'Produit modifié !',
+        'message' => 'L\'action a réussie !'
+      ));
+      return $this->redirect($this->generateUrl('app_products_index'));
     }
 
-    return new Response('Aucun résultat trouvé');
+    // Error
+    return $this->format($request, 'Le produit n\'existe pas !', 'error', 'error');
   }
+
   /**
-   * @Route("/products/{id}")
-   * @Method({"PUT", "PATCH"})
+   * @Route(
+   * "/products/create.{_format}",
+   * defaults={"_format": "html"},
+   * requirements={"_format": "html|json"}
+   *)
+   * @Method({"GET","POST"})
    */
-  public function editAction($id) {
-    return new Response("editer le produit numéro ".$id);
+  public function createAction(Request $request) {
+    // Create product
+    if($request->getMethod() == 'GET')
+    return $this->format($request, null, 'create', 'null');
+    // Create complete
+    else{
+      $this->get('session')->getFlashBag()->add('notice', array(
+        'title' => 'Produit ajouté !',
+        'message' => 'L\'action a réussie !'
+      ));
+      return $this->redirect($this->generateUrl('app_products_index'));
+    }
   }
+
   /**
-   * @Route("/products/")
-   * @Method("POST")
+   * @Route(
+   * "/products/delete/{id}.{_format}",
+   * defaults={"_format": "html"},
+   * requirements={"_format": "html|json", "id": "\d+"}
+   *)
+   * @Method({"GET", "DELETE"})
    */
-  public function createAction() {
-    return new Response("créer un nouveau produit");
-  }
-  /**
-   * @Route("/products/{id}")
-   * @Method("DELETE")
-   */
-  public function deleteAction($id) {
-    return new Response("supprimer le produit numéro ".$id);
+  public function deleteAction(Request $request, $id) {
+    // Delete product
+    if($request->getMethod() == 'GET')
+    foreach (self::PRODUCTS_TEST as $value){
+      if($id == $value['id'])
+      return $this->format($request, $value, 'delete', 'product');
+    }
+
+    // Delete complete
+    else{
+      $this->get('session')->getFlashBag()->add('notice', array(
+        'title' => 'Produit supprimé !',
+        'message' => 'L\'action a réussie !'
+      ));
+      return $this->redirect($this->generateUrl('app_products_index'));
+    }
+
+    // Error
+    return $this->format($request, 'Le produit n\'existe pas !', 'error', 'error');
   }
 }
 

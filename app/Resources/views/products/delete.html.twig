@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Mes produits
+{% endblock %}
+
+{% block body %}
+Etes-vous sur de vouloir supprimer le produit #{{product['id']}}
+<br />
+<form action="" method="post">
+  <input type="hidden" name="_method" value="DELETE" />
+  <input type="submit" name="valid" value="Oui" />
+  <a href="/products">
+    <input type="button" name="valid" value="Non" />
+  </a>
+</form>
+{% endblock %}

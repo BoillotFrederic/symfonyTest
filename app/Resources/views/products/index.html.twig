@@ -5,9 +5,27 @@
 {% endblock %}
 
 {% block body %}
+
+  {% for msg in app.session.flashbag.get('notice') %}
+  <div>
+    <strong>{{ msg.title }}</strong>
+    <br/>
+    {{ msg.message }}
+  </div>
+  {% endfor %}
+
+  <a href="/products/create">Ajouter un produit</a>
   <ul>
   {% for product in products %}
-  <li>ID : {{product['id']}} = {{product['reference']}}</li>
+  <li>
+    <a href="/products/{{product['id']}}">
+      ID : {{product['id']}} = {{product['reference']}}
+    </a>
+    |
+    <a href="/products/edit/{{product['id']}}">Editer le produit</a>
+    |
+    <a href="/products/delete/{{product['id']}}">Supprimer le produit</a>
+  </li>
   {% endfor %}
   </ul>
 {% endblock %}
