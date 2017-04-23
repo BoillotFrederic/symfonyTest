@@ -1,18 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Mes produits
+  Produit #{{product.getId()}}
 {% endblock %}
 
 {% block body %}
+<div id="content">
   <div>
-    ID : {{product['id']}} = {{product['reference']}}
-    |
-    <a href="/products/edit/{{product['id']}}">Editer le produit</a>
-    |
-    <a href="/products/delete/{{product['id']}}">Supprimer le produit</a>
-  </div>
+    <h1>#{{product.getId()}} : {{product.getReference()}}</h1>
 
-  <br />
-  <a href="/products">Retour à la liste</a>
+    <a href="/products/edit/{{product.getId()}}">
+      <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+    </a>
+    <a href="/products/delete/{{product.getId()}}">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+    </a>
+
+    <br />
+    <a href="/products">Retour à la liste</a>
+  </div>
+</div>
 {% endblock %}

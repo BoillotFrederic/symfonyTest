@@ -1,0 +1,87 @@
+body{
+  background-color:lightyellow;
+  text-align:center;
+  position:relative;
+}
+body,
+html{
+  height:100%;
+}
+*{
+  padding:0;
+  margin:0;
+}
+
+h1{
+  font-size:1.8em;
+  margin-bottom:20px;
+}
+
+#content{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  height:calc(100% - 40px);
+}
+
+#content div,
+#content form{
+  background-color:white;
+  border:1px solid lightgrey;
+  border-radius:7px;
+  padding:50px;
+  margin-left:200px;
+  margin-right:200px;
+  position:relative;
+}
+
+#addProduct{
+  position:absolute;
+  top:15px;
+  right:15px;
+}
+
+ul{
+  list-style:none;
+  text-align:left;
+}
+li{
+  padding:20px;
+  border-bottom:1px solid lightgrey;
+  margin-bottom:5px;
+}
+li:hover{
+  background-color:lightblue;
+  border-radius:10px;
+}
+li:last-child{
+  border-bottom:none;
+}
+
+a{
+  outline:none;
+}
+a:not(button){
+  color:darkblue;
+  text-decoration:none;
+  font-family:sans-serif;
+  font-size:1.2em;
+}
+a:hover:not(button){
+  color:red;
+}
+#flash{
+  position:absolute;
+  top:20px;
+  left:0;
+  width:100%;
+}
+#flash div{
+  display:inline-block;
+  margin:auto;
+  border:1px solid grey;
+  border-radius:7px;
+  background-color:red;
+  color:white;
+  padding:20px;
+}

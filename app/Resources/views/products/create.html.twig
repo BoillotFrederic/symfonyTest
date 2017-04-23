@@ -1,16 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Mes produits
+  Ajouter un produit
 {% endblock %}
 
 {% block body %}
-Ajout d'un nouveau produit
-<form action="" method="post">
-  <input type="text" name="ref" value="">
-  <input type="submit" value="Ajouter">
-</form>
+<div id="content">
+  <div>
+    <h1>Ajout d'un nouveau produit</h1>
+    <form action="" method="post">
+      <input type="text" name="ref" value="">
+      <input type="submit" value="Ajouter">
+    </form>
 
-<br />
-<a href="/products">Retour à la liste</a>
+    <br />
+    <a href="/products">Retour à la liste</a>
+  </div>
+</div>
 {% endblock %}

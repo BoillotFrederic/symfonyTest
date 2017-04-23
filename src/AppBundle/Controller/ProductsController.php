@@ -7,15 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use AppBundle\Entity\Product;
 
 class ProductsController extends Controller {
-
-  const PRODUCTS_TEST = [
-      ['id' => 1, 'reference' => 'AFR-1'],
-      ['id' => 2, 'reference' => 'AFR-2'],
-      ['id' => 3, 'reference' => 'AFR-3'],
-      ['id' => 4, 'reference' => 'AFR-4']
-  ];
 
   // Format
   private function format(Request $request, $content, $view, $params){
@@ -40,7 +34,11 @@ class ProductsController extends Controller {
    * @Method("GET")
    */
   public function indexAction(Request $request) {
-    return $this->format($request, self::PRODUCTS_TEST, 'index', 'products');
+    $products = $this->getDoctrine()
+                    ->getRepository('AppBundle:Product')
+                    ->findAll();
+
+    return $this->format($request, $products, 'index', 'products');
   }
 
   /**
@@ -52,12 +50,15 @@ class ProductsController extends Controller {
   * @Method("GET")
   */
   public function showAction(Request $request, $id) {
-    // Product
-    foreach (self::PRODUCTS_TEST as $value)
-    if($id == $value['id'])
-    return $this->format($request, $value, 'show', 'product');
+    $product = $this->getDoctrine()
+                    ->getRepository('AppBundle:Product')
+                    ->find($id);
+
+    if($product)
+    return $this->format($request, $product, 'show', 'product');
 
     // Error
+    else
     return $this->format($request, 'Aucun résultat trouvé !', 'error', 'error');
   }
 
@@ -71,13 +72,26 @@ class ProductsController extends Controller {
    */
   public function editAction(Request $request, $id) {
     // Edit product
-    if($request->getMethod() == 'GET')
-      foreach (self::PRODUCTS_TEST as $value){
-        if($id == $value['id'])
-        return $this->format($request, $value, 'edit', 'product');
-      }
+    if($request->getMethod() == 'GET'){
+      $product = $this->getDoctrine()
+                      ->getRepository('AppBundle:Product')
+                      ->find($id);
+
+      if($product)
+      return $this->format($request, $product, 'edit', 'product');
+    }
     // Edit complete
     else{
+
+      $em = $this->getDoctrine()->getManager();
+      $product = $em->getRepository('AppBundle:Product')->find($id);
+
+      if (!$product)
+      throw $this->createNotFoundException('Pas de produit pour l\'id ' . $id);
+
+      $product->setReference($request->get('ref'));
+      $em->flush();
+
       $this->get('session')->getFlashBag()->add('notice', array(
         'title' => 'Produit modifié !',
         'message' => 'L\'action a réussie !'
@@ -101,8 +115,16 @@ class ProductsController extends Controller {
     // Create product
     if($request->getMethod() == 'GET')
     return $this->format($request, null, 'create', 'null');
+
     // Create complete
     else{
+      $product = new Product();
+      $product->setReference($request->get('ref'));
+
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($product);
+      $em->flush();
+
       $this->get('session')->getFlashBag()->add('notice', array(
         'title' => 'Produit ajouté !',
         'message' => 'L\'action a réussie !'
@@ -121,14 +143,26 @@ class ProductsController extends Controller {
    */
   public function deleteAction(Request $request, $id) {
     // Delete product
-    if($request->getMethod() == 'GET')
-    foreach (self::PRODUCTS_TEST as $value){
-      if($id == $value['id'])
-      return $this->format($request, $value, 'delete', 'product');
+    if($request->getMethod() == 'GET'){
+      $product = $this->getDoctrine()
+                      ->getRepository('AppBundle:Product')
+                      ->find($id);
+
+      if($product)
+      return $this->format($request, $product, 'delete', 'product');
     }
 
     // Delete complete
     else{
+      $em = $this->getDoctrine()->getManager();
+      $product = $em->getRepository('AppBundle:Product')->find($id);
+
+      if (!$product)
+      throw $this->createNotFoundException('Pas de produit pour l\'id ' . $id);
+
+      $em->remove($product);
+      $em->flush();
+
       $this->get('session')->getFlashBag()->add('notice', array(
         'title' => 'Produit supprimé !',
         'message' => 'L\'action a réussie !'

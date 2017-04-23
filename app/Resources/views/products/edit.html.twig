@@ -1,16 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  Mes produits
+  Editer un produit
 {% endblock %}
 
 {% block body %}
-Modification du produit #{{product['id']}}
-<form action="" method="post">
-  <input type="hidden" name="_method" value="PATCH">
-  <input type="text" name="ref" value="{{product['reference']}}">
-  <input type="submit" value="Modifier">
-</form>
+<div id="content">
+  <div>
+    <h1>Modification du produit #{{product.getId()}}</h1>
+    <form action="" method="post">
+      <input type="hidden" name="_method" value="PATCH">
+      <input type="text" name="ref" value="{{product.getReference()}}">
+      <input type="submit" value="Modifier">
+    </form>
+    <br />
+    <a href="/products">Retour à la liste</a>
+  </div>
+</div>
 
 <br />
 <a href="/products">Retour à la liste</a>
