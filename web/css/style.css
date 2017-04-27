@@ -67,6 +67,7 @@ a:not(button){
   font-size:1.2em;
 }
 a:hover:not(button){
+  text-decoration:none;
   color:red;
 }
 #flash{
