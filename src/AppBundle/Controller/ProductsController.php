@@ -159,8 +159,12 @@ class ProductsController extends Controller {
       $em->remove($product);
       $em->flush();
 
-      $this->addFlash('msg', 'Produit supprimé !');
-      return $this->redirect($this->generateUrl('app_products_index'));
+      if($request->getRequestFormat() == 'html'){
+        $this->addFlash('msg', 'Produit supprimé !');
+        return $this->redirect($this->generateUrl('app_products_index'));
+      }
+      else
+      return $this->json('Produit supprimé !');
     }
 
     // Error

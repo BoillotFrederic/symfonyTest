@@ -12,8 +12,17 @@ function resize(){
   document.getElementsByTagName('body')[0].style.height = '100%';
 }
 
-resize()
+resize();
 
 window.onresize = function(){
   resize();
+}
+
+function del(id, url){
+  $.ajax({
+    method:'DELETE',
+    url: url + '.json'
+  }).done(function(){
+    $('#product'+id).fadeOut();
+  });
 }
