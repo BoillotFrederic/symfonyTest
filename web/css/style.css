@@ -1,5 +1,5 @@
 body{
-  background-color:lightyellow;
+  background-color:lightgrey;
   text-align:center;
   position:relative;
 }
@@ -27,7 +27,6 @@ h1{
 #content div,
 #content form{
   background-color:white;
-  border:1px solid lightgrey;
   border-radius:7px;
   padding:50px;
   margin-left:200px;
