@@ -15,7 +15,9 @@ class ProductsController extends Controller {
   private function format(Request $request, $content, $view, $params){
     switch ($request->getRequestFormat()) {
       case 'json':
-      return $this->json($content);
+      $serializer = $this->get('serializer');
+      $json = $serializer->serialize($content, 'json');
+      return $this->json($json);
 
       case 'html':
       return $this->render('products/'.$view.'.html.twig', [
@@ -92,10 +94,7 @@ class ProductsController extends Controller {
       $product->setReference($request->get('ref'));
       $em->flush();
 
-      $this->get('session')->getFlashBag()->add('notice', array(
-        'title' => 'Produit modifié !',
-        'message' => 'L\'action a réussie !'
-      ));
+      $this->addFlash('msg', 'Produit modifié !');
       return $this->redirect($this->generateUrl('app_products_index'));
     }
 
@@ -125,10 +124,7 @@ class ProductsController extends Controller {
       $em->persist($product);
       $em->flush();
 
-      $this->get('session')->getFlashBag()->add('notice', array(
-        'title' => 'Produit ajouté !',
-        'message' => 'L\'action a réussie !'
-      ));
+      $this->addFlash('msg', 'Produit ajouté !');
       return $this->redirect($this->generateUrl('app_products_index'));
     }
   }
@@ -163,10 +159,7 @@ class ProductsController extends Controller {
       $em->remove($product);
       $em->flush();
 
-      $this->get('session')->getFlashBag()->add('notice', array(
-        'title' => 'Produit supprimé !',
-        'message' => 'L\'action a réussie !'
-      ));
+      $this->addFlash('msg', 'Produit supprimé !');
       return $this->redirect($this->generateUrl('app_products_index'));
     }
 

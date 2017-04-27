@@ -6,31 +6,29 @@
 
 {% block body %}
 
-  {% for msg in app.session.flashbag.get('notice') %}
+  {% for msg in app.session.flashbag.get('msg') %}
   <div id="flash">
     <div>
-      <strong>{{ msg.title }}</strong>
-      <br/>
-      {{ msg.message }}
+      <strong>{{ msg }}</strong>
     </div>
   </div>
   {% endfor %}
 
   <div id="content">
     <div>
-      <a id="addProduct" href="/products/create">
+      <a id="addProduct" href="{{url('app_products_create')}}">
         <button>Ajouter un produit</button>
       </a>
       <ul>
       {% for product in products %}
       <li>
-        <a href="/products/{{product.getId()}}">
-          #{{product.getId()}} : {{product.getReference()}}
+        <a href="{{path('app_products_show', {'id': product.id})}}">
+          #{{product.id}} : {{product.reference}}
         </a>
-        <a href="/products/edit/{{product.getId()}}">
+        <a href="{{path('app_products_edit', {'id': product.id})}}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
         </a>
-        <a href="/products/delete/{{product.getId()}}">
+        <a href="{{path('app_products_delete', {'id': product.id})}}">
           <i class="fa fa-trash-o" aria-hidden="true"></i>
         </a>
       </li>

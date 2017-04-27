@@ -75,6 +75,7 @@ a:hover:not(button){
   top:20px;
   left:0;
   width:100%;
+  z-index:999;
 }
 #flash div{
   display:inline-block;

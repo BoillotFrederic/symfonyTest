@@ -7,12 +7,12 @@
 {% block body %}
 <div id="content">
   <div>
-    <h1>Etes-vous sur de vouloir supprimer le produit #{{product.getId()}}</h1>
+    <h1>Etes-vous sur de vouloir supprimer le produit #{{product.id}}</h1>
     <br />
     <form action="" method="post">
       <input type="hidden" name="_method" value="DELETE" />
       <input type="submit" name="valid" value="Oui" />
-      <a href="/products">
+      <a href="{{url('app_products_index')}}">
         <input type="button" name="valid" value="Non" />
       </a>
     </form>
