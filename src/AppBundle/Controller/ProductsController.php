@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Category;
 
 class ProductsController extends Controller {
 
@@ -79,6 +80,10 @@ class ProductsController extends Controller {
                       ->getRepository('AppBundle:Product')
                       ->find($id);
 
+      $category = $this->getDoctrine()
+                      ->getRepository('AppBundle:Category')
+                      ->findAll();
+
       if($product)
       return $this->format($request, $product, 'edit', 'product');
     }
@@ -112,8 +117,14 @@ class ProductsController extends Controller {
    */
   public function createAction(Request $request) {
     // Create product
-    if($request->getMethod() == 'GET')
-    return $this->format($request, null, 'create', 'null');
+    if($request->getMethod() == 'GET'){
+      $category = $this->getDoctrine()
+                      ->getRepository('AppBundle:Category')
+                      ->findAll();
+
+      if($category)
+      return $this->format($request, $category, 'create', 'category');
+    }
 
     // Create complete
     else{
