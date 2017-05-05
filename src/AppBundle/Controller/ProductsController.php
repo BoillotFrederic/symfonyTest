@@ -7,8 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use AppBundle\Entity\Product;
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Product;
 
 class ProductsController extends Controller {
 
@@ -85,7 +85,7 @@ class ProductsController extends Controller {
                       ->findAll();
 
       if($product)
-      return $this->format($request, $product, 'edit', 'product');
+      return $this->format($request, compact('product', 'category'), 'edit', 'data');
     }
     // Edit complete
     else{
@@ -97,6 +97,11 @@ class ProductsController extends Controller {
       throw $this->createNotFoundException('Pas de produit pour l\'id ' . $id);
 
       $product->setReference($request->get('ref'));
+      $category = $this->getDoctrine()->getRepository('AppBundle:Category')->find($request->get('category_id'));
+      $product->setCategory($category);
+
+
+      // $product->setCategoryId($request->get('category_id'));
       $em->flush();
 
       $this->addFlash('msg', 'Produit modifié !');
@@ -130,6 +135,8 @@ class ProductsController extends Controller {
     else{
       $product = new Product();
       $product->setReference($request->get('ref'));
+      $category = $this->getDoctrine()->getRepository('AppBundle:Category')->find($request->get('category_id'));
+      $product->setCategory($category);
 
       $em = $this->getDoctrine()->getManager();
       $em->persist($product);

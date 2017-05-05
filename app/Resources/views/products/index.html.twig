@@ -23,7 +23,7 @@
       {% for product in products %}
       <li id="product{{product.id}}">
         <a href="{{path('app_products_show', {'id': product.id})}}">
-          #{{product.id}} : {{product.reference}}
+          #{{product.id}} : {{product.reference}} [{{product.category.name}}]
         </a>
         <a href="{{path('app_products_edit', {'id': product.id})}}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i>

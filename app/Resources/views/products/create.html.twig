@@ -10,7 +10,7 @@
     <h1>Ajout d'un nouveau produit</h1>
     <form action="" method="post">
       <input type="text" name="ref" value="">
-      <select>
+      <select name="category_id">
         {% for cat in category %}
         <option value="{{cat.id}}">{{cat.name}}</option>
         {% endfor %}
